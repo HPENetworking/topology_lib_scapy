@@ -30,31 +30,28 @@ from __future__ import unicode_literals, absolute_import
 from __future__ import print_function, division
 from .generator import createcdmline, protocol
 import re
-from time import ctime
 import threading
 
 
 class ScapyThread(threading.Thread):
     def __init__(
             self, func, enode, topology,
-            proto_str='', packet_list=[], name='', count=0
+            proto_str='', packet_list=[], filter_str='',
+            count=0
                ):
         threading.Thread.__init__(self)
         self.func = func
         self.node = enode
         self.packet_list = packet_list
-        self.name = name
         self.proto_str = proto_str
-        self.args = (enode, proto_str, packet_list, topology, count)
-        print("ScapyThread Init of", self.name)
+        self.filter_str = filter_str
+        self.args = (enode, proto_str, packet_list, topology, filter_str, count)
 
     def outresult(self):
         return self.res
 
     def run(self):
-        print('Starting', self.name, 'at:', ctime())
         self.res = self.func(*self.args)
-        print('Starting', self.name, 'at:', ctime())
 
 
 def start_scapy(enode):
